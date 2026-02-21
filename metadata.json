@@ -1,0 +1,5 @@
+{
+  "name": "AI Script Integrator v2",
+  "description": "An intelligent notepad for editing and concatenating audio scripts with timestamps. It uses Gemini to automatically adjust timestamps when merging files.",
+  "requestFramePermissions": []
+}

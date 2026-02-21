@@ -690,7 +690,7 @@ Self Improvement,`;
     return (
         <div className="min-h-screen bg-gray-900 text-gray-200 flex flex-col p-4 sm:p-6 lg:p-8">
             <h1 className="text-3xl font-bold text-center text-gray-100 mb-6">
-                AI Script Integrator
+                AI Script Integrator v.2
             </h1>
             
             <div className="mb-6">

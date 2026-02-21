@@ -2,11 +2,13 @@
 import { GoogleGenAI } from "@google/genai";
 import { parseScriptContent, ParsedScriptLine, formatSecondsToTime } from '../utils/time';
 
-// In Vite, process.env.API_KEY is replaced by a string at build time via 'define'
-const apiKey = process.env.API_KEY || '';
-const ai = new GoogleGenAI({ apiKey: apiKey });
+const getAI = () => {
+    const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY || '';
+    return new GoogleGenAI({ apiKey });
+};
 
 export async function adjustTimestamps(script: string, offsetSeconds: number): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a script-processing assistant. Your task is to adjust timestamps in a given audio script.
 
@@ -56,6 +58,7 @@ async function findBestMatchWithAI(audioLine: ParsedScriptLine, videoCandidates:
     if (videoCandidates.length === 0) return null;
     if (videoCandidates.length === 1) return videoCandidates[0];
 
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a content analysis assistant. Your task is to find the most relevant video script line for a given audio script line. The candidates are all from a similar timeframe.
 
@@ -152,6 +155,7 @@ export async function combineScripts(audioScript: string, videoScript: string): 
 }
 
 export async function translateToThai(text: string): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a professional translator and script editor. Your task is to convert English text into a bilingual English-Thai audio script format, sentence by sentence.
 
@@ -193,6 +197,7 @@ Today we will discuss mindfulness.
 }
 
 export async function generateEnglishSubtitle(text: string): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a subtitle formatting expert. Your task is to format an English script into subtitles where STRICTLY NO single line exceeds 40 characters (including spaces).
 
@@ -236,6 +241,7 @@ export async function generateYouTubeHook(
     audioScript: string,
     videoScript: string
 ): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
@@ -305,6 +311,7 @@ export async function generateYouTubeTitle(
     videoScript: string,
     hook: string
 ): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
@@ -377,6 +384,7 @@ export async function generateVideoDescription(
     title: string,
     channelLinks: string
 ): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
@@ -454,6 +462,7 @@ export async function generateVideoTags(
     title: string,
     videoDescription: string
 ): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
@@ -534,6 +543,7 @@ export async function generateThumbnailCaption(
     videoDescription: string,
     videoTags: string
 ): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
@@ -612,6 +622,7 @@ export async function generateThumbnailPrompt(
     thumbnailCaption: string,
     thumbnailGuidance: string // Added Guidance
 ): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator, a leading AI Artist, and an expert Prompt Engineer.
 
@@ -684,9 +695,7 @@ export async function generateThumbnailImage(
     prompt: string,
     model: string
 ): Promise<string> {
-    // Create a fresh instance to ensure the most up-to-date API key is used
-    const apiKey = process.env.API_KEY || '';
-    const ai = new GoogleGenAI({ apiKey: apiKey });
+    const ai = getAI();
     
     if (model.includes('imagen')) {
          try {
@@ -759,6 +768,7 @@ export async function generateConsultingResponse(
     chatHistory: string,
     currentPrompt: string
 ): Promise<string> {
+    const ai = getAI();
     const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI. You also have expertise in Art Direction and Prompt Engineering.
 

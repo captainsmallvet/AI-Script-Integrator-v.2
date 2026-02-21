@@ -114,6 +114,7 @@ Self Improvement,`;
     const [thumbnailImage, setThumbnailImage] = useState<string | null>(null);
     const [isCreatingImage, setIsCreatingImage] = useState<boolean>(false);
     const [imageModel, setImageModel] = useState<string>('gemini-2.5-flash-image');
+    const [textModel, setTextModel] = useState<string>('gemini-2.5-flash');
 
     // Loading states
     const [isAudioLoading, setIsAudioLoading] = useState<boolean>(false);
@@ -186,7 +187,7 @@ Self Improvement,`;
                 showFeedback('Warning: "clip length" not found. Appending raw content.');
                 setContent(`${baseContent.trim()}\n${newContent.trim()}`);
             } else {
-                const adjustedContent = await adjustTimestamps(newContent, offsetSeconds);
+                const adjustedContent = await adjustTimestamps(newContent, offsetSeconds, textModel);
                 setContent(`${baseContent.trim()}\n${adjustedContent.trim()}`);
                 showFeedback('File merged and timestamps adjusted.');
             }
@@ -368,7 +369,7 @@ Self Improvement,`;
         }
         setIsCombining(true);
         try {
-            const result = await combineScripts(audioScriptContent, videoScriptContent);
+            const result = await combineScripts(audioScriptContent, videoScriptContent, textModel);
             setCombinedScriptContent(result);
             showFeedback("Scripts combined!");
         } catch (error) {
@@ -403,7 +404,7 @@ Self Improvement,`;
         if (!englishScriptContent) { showFeedback("Empty input."); return; }
         setIsEnglishThaiLoading(true);
         try {
-            const result = await translateToThai(englishScriptContent);
+            const result = await translateToThai(englishScriptContent, textModel);
             setEnglishThaiScriptContent(result);
             showFeedback("Generated!");
         } catch (e) { showFeedback("Failed."); } finally { setIsEnglishThaiLoading(false); }
@@ -419,7 +420,7 @@ Self Improvement,`;
         if (!englishScriptContent) { showFeedback("Empty input."); return; }
         setIsEnglishSubtitleLoading(true);
         try {
-            const result = await generateEnglishSubtitle(englishScriptContent);
+            const result = await generateEnglishSubtitle(englishScriptContent, textModel);
             setEnglishSubtitleContent(result);
             showFeedback("Generated!");
         } catch (e) { showFeedback("Failed."); } finally { setIsEnglishSubtitleLoading(false); }
@@ -479,7 +480,7 @@ Self Improvement,`;
         if (!englishScriptContent || !videoScriptContent) { showFeedback("Requires scripts."); return; }
         setIsHookLoading(true);
         try {
-            const hook = await generateYouTubeHook(youTubeChannelName, youTubeDescription, youTubeTags, targetGroupContent, englishScriptContent, videoScriptContent);
+            const hook = await generateYouTubeHook(youTubeChannelName, youTubeDescription, youTubeTags, targetGroupContent, englishScriptContent, videoScriptContent, textModel);
             setHookContent(hook);
             showFeedback("Generated!");
         } catch (e) { showFeedback("Failed."); } finally { setIsHookLoading(false); }
@@ -495,7 +496,7 @@ Self Improvement,`;
         if (!englishScriptContent || !videoScriptContent || !hookContent) { showFeedback("Missing info."); return; }
         setIsTitleLoading(true);
         try {
-            const title = await generateYouTubeTitle(youTubeChannelName, youTubeDescription, youTubeTags, targetGroupContent, englishScriptContent, videoScriptContent, hookContent);
+            const title = await generateYouTubeTitle(youTubeChannelName, youTubeDescription, youTubeTags, targetGroupContent, englishScriptContent, videoScriptContent, hookContent, textModel);
             setTitleContent(title);
             showFeedback("Generated!");
         } catch (e) { showFeedback("Failed."); } finally { setIsTitleLoading(false); }
@@ -511,7 +512,7 @@ Self Improvement,`;
         if (!englishScriptContent || !videoScriptContent || !hookContent || !titleContent) { showFeedback("Missing info."); return; }
         setIsVideoDescriptionLoading(true);
         try {
-            const desc = await generateVideoDescription(youTubeChannelName, youTubeDescription, youTubeTags, targetGroupContent, englishScriptContent, videoScriptContent, hookContent, titleContent, linkToChannelContent);
+            const desc = await generateVideoDescription(youTubeChannelName, youTubeDescription, youTubeTags, targetGroupContent, englishScriptContent, videoScriptContent, hookContent, titleContent, linkToChannelContent, textModel);
             setVideoDescriptionContent(desc);
             showFeedback("Generated!");
         } catch (e) { showFeedback("Failed."); } finally { setIsVideoDescriptionLoading(false); }
@@ -527,7 +528,7 @@ Self Improvement,`;
         if (!englishScriptContent || !videoScriptContent || !hookContent || !titleContent || !videoDescriptionContent) { showFeedback("Missing info."); return; }
         setIsVideoTagsLoading(true);
         try {
-            const tags = await generateVideoTags(youTubeChannelName, youTubeDescription, youTubeTags, linkToChannelContent, targetGroupContent, englishScriptContent, videoScriptContent, hookContent, titleContent, videoDescriptionContent);
+            const tags = await generateVideoTags(youTubeChannelName, youTubeDescription, youTubeTags, linkToChannelContent, targetGroupContent, englishScriptContent, videoScriptContent, hookContent, titleContent, videoDescriptionContent, textModel);
             setVideoTagsContent(tags);
             showFeedback("Generated!");
         } catch (e) { showFeedback("Failed."); } finally { setIsVideoTagsLoading(false); }
@@ -543,7 +544,7 @@ Self Improvement,`;
         if (!englishScriptContent || !videoScriptContent || !hookContent || !titleContent || !videoDescriptionContent || !videoTagsContent) { showFeedback("Missing info."); return; }
         setIsThumbnailCaptionLoading(true);
         try {
-            const caption = await generateThumbnailCaption(youTubeChannelName, youTubeDescription, youTubeTags, linkToChannelContent, targetGroupContent, englishScriptContent, videoScriptContent, hookContent, titleContent, videoDescriptionContent, videoTagsContent);
+            const caption = await generateThumbnailCaption(youTubeChannelName, youTubeDescription, youTubeTags, linkToChannelContent, targetGroupContent, englishScriptContent, videoScriptContent, hookContent, titleContent, videoDescriptionContent, videoTagsContent, textModel);
             setThumbnailCaptionContent(caption);
             showFeedback("Generated!");
         } catch (e) { showFeedback("Failed."); } finally { setIsThumbnailCaptionLoading(false); }
@@ -580,7 +581,8 @@ Self Improvement,`;
                 videoDescriptionContent, 
                 videoTagsContent, 
                 thumbnailCaptionContent,
-                thumbnailGuidanceContent
+                thumbnailGuidanceContent,
+                textModel
             );
             setThumbnailPromptContent(prompt);
             showFeedback("Generated!");
@@ -648,7 +650,8 @@ Self Improvement,`;
             const response = await generateConsultingResponse(
                 youTubeChannelName, youTubeDescription, youTubeTags, linkToChannelContent, targetGroupContent,
                 audioScriptContent, videoScriptContent, hookContent, titleContent, videoDescriptionContent,
-                videoTagsContent, thumbnailCaptionContent, thumbnailPromptContent, chatHistoryContent, finalPromptToSend
+                videoTagsContent, thumbnailCaptionContent, thumbnailPromptContent, chatHistoryContent, finalPromptToSend,
+                textModel
             );
             
             // In chat history, we only show the user's visible prompt + attachment indicator
@@ -693,7 +696,7 @@ Self Improvement,`;
                 AI Script Integrator v.2
             </h1>
             
-            <div className="mb-6">
+            <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Header
                     id="projectName"
                     label="Project Name"
@@ -701,6 +704,23 @@ Self Improvement,`;
                     onProjectNameChange={setProjectName}
                     placeholder="e.g., Lecture_Week1_TopicA"
                 />
+                <div className="flex flex-col">
+                    <label htmlFor="textModelSelect" className="block text-sm font-medium text-gray-400 mb-1">
+                        Text Reasoning Model (โมเดลประมวลผลข้อความ)
+                    </label>
+                    <select
+                        id="textModelSelect"
+                        value={textModel}
+                        onChange={(e) => setTextModel(e.target.value)}
+                        className="bg-gray-800 border border-gray-700 text-gray-100 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    >
+                        <option value="gemini-2.5-flash">Gemini 2.5 Flash (Default)</option>
+                        <option value="gemini-3-flash-preview">Gemini 3 Flash Preview</option>
+                        <option value="gemini-3.1-pro-preview">Gemini 3.1 Pro Preview</option>
+                        <option value="gemini-flash-latest">Gemini Flash Latest</option>
+                        <option value="gemini-flash-lite-latest">Gemini Flash Lite Latest</option>
+                    </select>
+                </div>
             </div>
 
             {/* Hidden Input Fields for Fallback File Loading */}

@@ -7,9 +7,8 @@ const getAI = () => {
     return new GoogleGenAI({ apiKey });
 };
 
-export async function adjustTimestamps(script: string, offsetSeconds: number): Promise<string> {
+export async function adjustTimestamps(script: string, offsetSeconds: number, model: string = 'gemini-2.5-flash'): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a script-processing assistant. Your task is to adjust timestamps in a given audio script.
 
 You will be given an offset time in seconds and a new script content. You must add this offset to every timestamp (\`mm:ss\`) found in the new script. This includes timestamps at the beginning of lines and the timestamp in the final "clip length mm:ss" line.
@@ -54,12 +53,11 @@ ${script}
 }
 
 
-async function findBestMatchWithAI(audioLine: ParsedScriptLine, videoCandidates: ParsedScriptLine[]): Promise<ParsedScriptLine | null> {
+async function findBestMatchWithAI(audioLine: ParsedScriptLine, videoCandidates: ParsedScriptLine[], model: string = 'gemini-2.5-flash'): Promise<ParsedScriptLine | null> {
     if (videoCandidates.length === 0) return null;
     if (videoCandidates.length === 1) return videoCandidates[0];
 
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a content analysis assistant. Your task is to find the most relevant video script line for a given audio script line. The candidates are all from a similar timeframe.
 
 Respond with ONLY the full, exact text of the best matching video script line. Do not add any other words, explanations, or formatting.`;
@@ -91,7 +89,7 @@ ${candidateTexts}
 }
 
 
-export async function combineScripts(audioScript: string, videoScript: string): Promise<string> {
+export async function combineScripts(audioScript: string, videoScript: string, model: string = 'gemini-2.5-flash'): Promise<string> {
     const { lines: audioLines, clipLength: audioClipLength } = parseScriptContent(audioScript);
     const { lines: videoLines } = parseScriptContent(videoScript);
 
@@ -113,7 +111,7 @@ export async function combineScripts(audioScript: string, videoScript: string): 
             );
 
             if (fuzzyCandidates.length > 0) {
-                bestVideoMatch = await findBestMatchWithAI(audioLine, fuzzyCandidates);
+                bestVideoMatch = await findBestMatchWithAI(audioLine, fuzzyCandidates, model);
                 if(bestVideoMatch) {
                     const originalIndex = videoLines.findIndex(v => v.timestamp === bestVideoMatch!.timestamp && v.text === bestVideoMatch!.text);
                     if(originalIndex !== -1) usedVideoIndices.add(videoLines[originalIndex].timestamp);
@@ -154,9 +152,8 @@ export async function combineScripts(audioScript: string, videoScript: string): 
     return result;
 }
 
-export async function translateToThai(text: string): Promise<string> {
+export async function translateToThai(text: string, model: string = 'gemini-2.5-flash'): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a professional translator and script editor. Your task is to convert English text into a bilingual English-Thai audio script format, sentence by sentence.
 
 Instructions:
@@ -196,9 +193,8 @@ Today we will discuss mindfulness.
     }
 }
 
-export async function generateEnglishSubtitle(text: string): Promise<string> {
+export async function generateEnglishSubtitle(text: string, model: string = 'gemini-2.5-flash'): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a subtitle formatting expert. Your task is to format an English script into subtitles where STRICTLY NO single line exceeds 40 characters (including spaces).
 
 Rules:
@@ -239,10 +235,10 @@ export async function generateYouTubeHook(
     tags: string,
     targetGroup: string,
     audioScript: string,
-    videoScript: string
+    videoScript: string,
+    model: string = 'gemini-2.5-flash'
 ): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
 Your Task:
@@ -309,10 +305,10 @@ export async function generateYouTubeTitle(
     targetGroup: string,
     audioScript: string,
     videoScript: string,
-    hook: string
+    hook: string,
+    model: string = 'gemini-2.5-flash'
 ): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
 Your Task:
@@ -382,10 +378,10 @@ export async function generateVideoDescription(
     videoScript: string,
     hook: string,
     title: string,
-    channelLinks: string
+    channelLinks: string,
+    model: string = 'gemini-2.5-flash'
 ): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
 Your Task:
@@ -460,10 +456,10 @@ export async function generateVideoTags(
     videoScript: string,
     hook: string,
     title: string,
-    videoDescription: string
+    videoDescription: string,
+    model: string = 'gemini-2.5-flash'
 ): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
 Your Task:
@@ -541,10 +537,10 @@ export async function generateThumbnailCaption(
     hook: string,
     title: string,
     videoDescription: string,
-    videoTags: string
+    videoTags: string,
+    model: string = 'gemini-2.5-flash'
 ): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
 
 Your Task:
@@ -620,10 +616,10 @@ export async function generateThumbnailPrompt(
     videoDescription: string,
     videoTags: string,
     thumbnailCaption: string,
-    thumbnailGuidance: string // Added Guidance
+    thumbnailGuidance: string, // Added Guidance
+    model: string = 'gemini-2.5-flash'
 ): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator, a leading AI Artist, and an expert Prompt Engineer.
 
 Core Competencies:
@@ -699,14 +695,20 @@ export async function generateThumbnailImage(
     
     if (model.includes('imagen')) {
          try {
+            const config: any = {
+                numberOfImages: 1,
+                outputMimeType: 'image/png',
+            };
+            
+            // Only add aspectRatio if it's likely supported (Imagen models usually do)
+            if (model.includes('imagen')) {
+                config.aspectRatio = '16:9';
+            }
+
             const response = await ai.models.generateImages({
                 model: model, 
                 prompt: prompt,
-                config: {
-                    numberOfImages: 1,
-                    outputMimeType: 'image/png',
-                    aspectRatio: '16:9',
-                },
+                config: config,
             });
             const base64EncodeString = response.generatedImages?.[0]?.image?.imageBytes;
             if (!base64EncodeString) {
@@ -719,13 +721,20 @@ export async function generateThumbnailImage(
          }
     } else {
         try {
-            const config: any = {
-                imageConfig: {
+            const config: any = {};
+            
+            // Only add imageConfig if the model is known to support it (nano banana series)
+            // or if we want to try and fallback. 
+            // The user requested to skip if not supported.
+            const isImageModel = model.includes('-image') || model.includes('gemini-3');
+            
+            if (isImageModel) {
+                config.imageConfig = {
                     aspectRatio: "16:9",
+                };
+                if (model === 'gemini-3-pro-image-preview') {
+                    config.imageConfig.imageSize = "1K";
                 }
-            };
-            if (model === 'gemini-3-pro-image-preview') {
-                 config.imageConfig.imageSize = "1K";
             }
 
             const response = await ai.models.generateContent({
@@ -743,10 +752,10 @@ export async function generateThumbnailImage(
                     return `data:${mimeType};base64,${base64EncodeString}`;
                 }
             }
-            throw new Error("No image part found in response.");
+            throw new Error("No image part found in response. This model might not support image generation.");
         } catch (error) {
             console.error("Error generating image with Gemini:", error);
-            throw new Error("Failed to generate thumbnail image.");
+            throw new Error(`Failed to generate thumbnail image: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }
 }
@@ -766,10 +775,10 @@ export async function generateConsultingResponse(
     thumbnailCaption: string,
     thumbnailPrompt: string,
     chatHistory: string,
-    currentPrompt: string
+    currentPrompt: string,
+    model: string = 'gemini-2.5-flash'
 ): Promise<string> {
     const ai = getAI();
-    const model = 'gemini-2.5-flash';
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI. You also have expertise in Art Direction and Prompt Engineering.
 
 Your Task:

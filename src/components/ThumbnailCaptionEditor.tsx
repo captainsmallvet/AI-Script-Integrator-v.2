@@ -31,6 +31,9 @@ const ThumbnailCaptionEditor: React.FC<ThumbnailCaptionEditorProps> = ({
             <label htmlFor={editorId} className="mb-2 text-lg font-semibold text-gray-300">
                 {label}
             </label>
+            <p className="mb-2 text-sm text-red-400 font-medium italic">
+                *** ลบภาษา/ข้อความที่ไม่ต้องการออกก่อน Generate Thumbnail Prompt
+            </p>
             <div className="flex items-center justify-start gap-2 flex-wrap mb-4">
                 <ActionButton onClick={onGenerate} disabled={isLoading} icon={isLoading ? <Spinner/> : <GenerateIcon />} text={isLoading ? "Generating..." : "Generate"} />
                 <ActionButton onClick={onOpen} disabled={isLoading} icon={<OpenIcon />} text="Open" />

@@ -713,7 +713,7 @@ Self Improvement,`;
     return (
         <div className="min-h-screen bg-gray-900 text-gray-200 flex flex-col p-4 sm:p-6 lg:p-8">
         {/* API Key Control Panel  */}
-              <div className="max-w-4xl mx-auto mt-4 px-4">
+              <div className="max-w-8xl mx-auto mt-4 px-4">
                       <div className="p-4 bg-slate-900 border border-emerald-500/20 rounded-2xl shadow-2xl">
                                 <div className="flex flex-col gap-2">
                                             <label className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest ml-1">

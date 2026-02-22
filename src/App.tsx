@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Header from './components/Header';
 import ScriptEditor from './components/ScriptEditor';
 import CombinedEditor from './components/CombinedEditor';
@@ -24,6 +24,26 @@ import { adjustTimestamps, combineScripts, translateToThai, generateEnglishSubti
 
 const App: React.FC = () => {
     // Unified state
+    // --- ระบบจัดการ API Key สำหรับใช้งานส่วนตัว ---
+      const [inputKey, setInputKey] = useState<string>('');
+
+        useEffect(() => {
+            const savedKey = localStorage.getItem('gemini_api_key');
+                if (savedKey) {
+                      setInputKey(savedKey);
+                            (window as any).process = { env: { API_KEY: savedKey } };
+                                } else {
+                                      setInputKey('no API key');
+                                          }
+                                            }, []);
+
+                                              const handleSendKey = () => {
+                                                  if (inputKey && inputKey !== 'no API key') {
+                                                        localStorage.setItem('gemini_api_key', inputKey);
+                                                              alert("บันทึก API Key เรียบร้อยแล้วครับ");
+                                                                    window.location.reload(); 
+                                                                        }
+                                                                          };
     const [projectName, setProjectName] = useState<string>('');
     const [audioScriptContent, setAudioScriptContent] = useState<string>('');
     const [videoScriptContent, setVideoScriptContent] = useState<string>('');
@@ -692,6 +712,36 @@ Self Improvement,`;
 
     return (
         <div className="min-h-screen bg-gray-900 text-gray-200 flex flex-col p-4 sm:p-6 lg:p-8">
+        {/* API Key Control Panel  */}
+              <div className="max-w-4xl mx-auto mt-4 px-4">
+                      <div className="p-4 bg-slate-900 border border-emerald-500/20 rounded-2xl shadow-2xl">
+                                <div className="flex flex-col gap-2">
+                                            <label className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest ml-1">
+                                                          API Key Control Panel :
+                                                                      </label>
+                                                                                  <div className="flex flex-wrap md:flex-nowrap gap-2">
+                                                                                                <input
+                                                                                                                type="text"
+                                                                                                                                value={inputKey}
+                                                                                                                                                onChange={(e) => setInputKey(e.target.value)}
+                                                                                                                                                                className="w-full flex-1 bg-black/50 border border-slate-700 rounded-xl px-4 py-2 text-sm font-mono text-emerald-400 outline-none focus:border-emerald-500/50 transition-all"
+                                                                                                                                                                                placeholder="กรอก API Key ตรงนี้..."
+                                                                                                                                                                                              />
+                                                                                                                                                                                                            <div className="flex gap-2 w-full md:w-auto">
+                                                                                                                                                                                                                            <button onClick={handleSendKey} className="flex-1 md:flex-none bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 px-6 rounded-xl transition-all shadow-lg shadow-emerald-900/20">
+                                                                                                                                                                                                                                              SEND
+                                                                                                                                                                                                                                                              </button>
+                                                                                                                                                                                                                                                                              <button onClick={() => { navigator.clipboard.writeText(inputKey); alert("Copy แล้วครับ"); }} className="bg-slate-800 hover:bg-slate-700 text-white text-xs py-2 px-4 rounded-xl transition-all">
+                                                                                                                                                                                                                                                                                                COPY
+                                                                                                                                                                                                                                                                                                                </button>
+                                                                                                                                                                                                                                                                                                                                <button onClick={() => { localStorage.removeItem('gemini_api_key'); setInputKey(''); alert("ลบ Key แล้วครับ"); }} className="bg-slate-800 hover:text-red-400 text-white text-xs py-2 px-4 rounded-xl transition-all">
+                                                                                                                                                                                                                                                                                                                                                  CLEAR
+                                                                                                                                                                                                                                                                                                                                                                  </button>
+                                                                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                                                                                                                                      </div>
+                                                                                                                                                                                                                                                                                                                                                                                                              </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
             <h1 className="text-3xl font-bold text-center text-gray-100 mb-6">
                 AI Script Integrator v.2
             </h1>

@@ -2,10 +2,13 @@
 import { GoogleGenAI } from "@google/genai";
 import { parseScriptContent, ParsedScriptLine, formatSecondsToTime } from '../utils/time';
 
-const getAI = () => {
-    const apiKey = process.env.GEMINI_API_KEY || process.env.API_KEY || '';
-    return new GoogleGenAI({ apiKey });
-};
+// ลบของเก่า: const getAi = () => new GoogleGenAI({ apiKey: process.env.API_KEY });
+// วางของใหม่นี้ลงไปแทน:
+const getAi = () => {
+  const savedKey = localStorage.getItem('gemini_api_key');
+    const apiKey = savedKey || (window as any).process?.env?.API_KEY || "";
+      return new GoogleGenAI({ apiKey });
+      };
 
 export async function adjustTimestamps(script: string, offsetSeconds: number, model: string = 'gemini-2.5-flash'): Promise<string> {
     const ai = getAI();

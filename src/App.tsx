@@ -134,7 +134,7 @@ Self Improvement,`;
     const [thumbnailImage, setThumbnailImage] = useState<string | null>(null);
     const [isCreatingImage, setIsCreatingImage] = useState<boolean>(false);
     const [imageModel, setImageModel] = useState<string>('gemini-2.5-flash-image');
-    const [textModel, setTextModel] = useState<string>('gemini-2.5-flash');
+    const [textModel, setTextModel] = useState<string>('gemini-3-flash-preview');
 
     // Loading states
     const [isAudioLoading, setIsAudioLoading] = useState<boolean>(false);

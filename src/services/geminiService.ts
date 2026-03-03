@@ -8,7 +8,7 @@ const getAI = () => {
     return new GoogleGenAI({ apiKey });
 };
 
-export async function adjustTimestamps(script: string, offsetSeconds: number, model: string = 'gemini-2.5-flash'): Promise<string> {
+export async function adjustTimestamps(script: string, offsetSeconds: number, model: string = 'gemini-3-flash-preview'): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a script-processing assistant. Your task is to adjust timestamps in a given audio script.
 
@@ -54,7 +54,7 @@ ${script}
 }
 
 
-async function findBestMatchWithAI(audioLine: ParsedScriptLine, videoCandidates: ParsedScriptLine[], model: string = 'gemini-2.5-flash'): Promise<ParsedScriptLine | null> {
+async function findBestMatchWithAI(audioLine: ParsedScriptLine, videoCandidates: ParsedScriptLine[], model: string = 'gemini-3-flash-preview'): Promise<ParsedScriptLine | null> {
     if (videoCandidates.length === 0) return null;
     if (videoCandidates.length === 1) return videoCandidates[0];
 
@@ -90,7 +90,7 @@ ${candidateTexts}
 }
 
 
-export async function combineScripts(audioScript: string, videoScript: string, model: string = 'gemini-2.5-flash'): Promise<string> {
+export async function combineScripts(audioScript: string, videoScript: string, model: string = 'gemini-3-flash-preview'): Promise<string> {
     const { lines: audioLines, clipLength: audioClipLength } = parseScriptContent(audioScript);
     const { lines: videoLines } = parseScriptContent(videoScript);
 
@@ -153,7 +153,7 @@ export async function combineScripts(audioScript: string, videoScript: string, m
     return result;
 }
 
-export async function translateToThai(text: string, model: string = 'gemini-2.5-flash'): Promise<string> {
+export async function translateToThai(text: string, model: string = 'gemini-3-flash-preview'): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a professional translator and script editor. Your task is to convert English text into a bilingual English-Thai audio script format, sentence by sentence.
 
@@ -194,7 +194,7 @@ Today we will discuss mindfulness.
     }
 }
 
-export async function generateEnglishSubtitle(text: string, model: string = 'gemini-2.5-flash'): Promise<string> {
+export async function generateEnglishSubtitle(text: string, model: string = 'gemini-3-flash-preview'): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a subtitle formatting expert. Your task is to format an English script into subtitles where STRICTLY NO single line exceeds 40 characters (including spaces).
 
@@ -237,7 +237,7 @@ export async function generateYouTubeHook(
     targetGroup: string,
     audioScript: string,
     videoScript: string,
-    model: string = 'gemini-2.5-flash'
+    model: string = 'gemini-3-flash-preview'
 ): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
@@ -307,7 +307,7 @@ export async function generateYouTubeTitle(
     audioScript: string,
     videoScript: string,
     hook: string,
-    model: string = 'gemini-2.5-flash'
+    model: string = 'gemini-3-flash-preview'
 ): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
@@ -380,7 +380,7 @@ export async function generateVideoDescription(
     hook: string,
     title: string,
     channelLinks: string,
-    model: string = 'gemini-2.5-flash'
+    model: string = 'gemini-3-flash-preview'
 ): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
@@ -458,7 +458,7 @@ export async function generateVideoTags(
     hook: string,
     title: string,
     videoDescription: string,
-    model: string = 'gemini-2.5-flash'
+    model: string = 'gemini-3-flash-preview'
 ): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
@@ -539,7 +539,7 @@ export async function generateThumbnailCaption(
     title: string,
     videoDescription: string,
     videoTags: string,
-    model: string = 'gemini-2.5-flash'
+    model: string = 'gemini-3-flash-preview'
 ): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI.
@@ -618,7 +618,7 @@ export async function generateThumbnailPrompt(
     videoTags: string,
     thumbnailCaption: string,
     thumbnailGuidance: string, // Added Guidance
-    model: string = 'gemini-2.5-flash'
+    model: string = 'gemini-3-flash-preview'
 ): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a world-class YouTube Content Creator, a leading AI Artist, and an expert Prompt Engineer.
@@ -777,7 +777,7 @@ export async function generateConsultingResponse(
     thumbnailPrompt: string,
     chatHistory: string,
     currentPrompt: string,
-    model: string = 'gemini-2.5-flash'
+    model: string = 'gemini-3-flash-preview'
 ): Promise<string> {
     const ai = getAI();
     const systemInstruction = `You are a world-class YouTube Content Creator expert. You possess high-level skills in growing YouTube channels rapidly, creating viral content, persuasion psychology, social media marketing, social psychology, and have a deep, profound understanding of Theravada Buddhist teachings. You are an expert in YouTube SEO, Algorithm, and AI. You also have expertise in Art Direction and Prompt Engineering.

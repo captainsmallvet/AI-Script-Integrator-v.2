@@ -137,13 +137,16 @@ const ThumbnailPromptEditor: React.FC<ThumbnailPromptEditorProps> = ({
                             onChange={(e) => onModelChange(e.target.value)}
                             className="bg-gray-700 text-gray-200 rounded px-3 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
-                            <option value="gemini-2.5-flash-image">gemini-2.5-flash-image (Default)</option>
-                            <option value="gemini-3-pro-image-preview">gemini-3-pro-image-preview</option>
-                            <option value="imagen-4.0-generate-001">imagen-4.0-generate-001</option>
-                            <option value="gemini-flash-latest">gemini-flash-latest</option>
-                            <option value="gemini-flash-lite-latest">gemini-flash-lite-latest</option>
-                            <option value="gemini-3-flash-preview">gemini-3-flash-preview</option>
-                            <option value="gemini-3.1-pro-preview">gemini-3.1-pro-preview</option>
+<option value="gemini-2.5-flash-image">gemini-2.5-flash-image (Default)</option>
+<option value="gemini-3-pro-image-preview">gemini-3-pro-image-preview</option>
+<option value="imagen-4.0-generate-001">imagen-4.0-generate-001</option>
+<option value="gemini-flash-image-latest">Gemini Flash Image Latest</option>
+<option value="gemini-pro-image-latest">Gemini Pro Image Latest</option>
+<option value="gemini-flash-latest">gemini-flash-latest</option>
+<option value="gemini-flash-lite-latest">gemini-flash-lite-latest</option>
+<option value="gemini-3-flash-preview">gemini-3-flash-preview</option>
+<option value="gemini-3.1-pro-preview">gemini-3.1-pro-preview</option>
+<option value="gemini-3.1-flash-image-preview">Gemini 3.1 Flash Image (High Quality)</option>
                         </select>
                     </div>
                     {/* Overlay Toggle */}

@@ -771,6 +771,8 @@ Self Improvement,`;
 <option value="gemini-flash-latest">Gemini Flash Latest</option>
 <option value="gemini-flash-lite-latest">Gemini Flash Lite Latest</option>
 <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+<option value="gemini-2.5-pro">Gemini 2.5 Pro</option>
+<option value="gemini-pro-latest">Gemini Pro (Latest Stable)</option>
                     </select>
                 </div>
             </div>
